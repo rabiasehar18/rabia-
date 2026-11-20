@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Midnight Archive | Rabia Sehar</title>
+<meta name="description" content="The Midnight Archive by Rabia Sehar — original interactive mysteries, hidden clues and dark fiction.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#0f1115;--surface:#181b22;--surface2:#20232b;--text:#eaeaea;--muted:#a29d96;--red:#c81d25;--gold:#b99b69;--line:#34343a;--serif:'Playfair Display',serif;--body:'DM Sans',sans-serif;--display:'Cormorant Garamond',serif}
+*{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.7}
+body.modal-open{overflow:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer}
+.container{width:86%;max-width:1250px;margin:auto}
+.section{padding:95px 0}
+.eyebrow{color:var(--gold);font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase}
+.section-heading{margin-bottom:38px}
+.section-heading h2{font-family:var(--serif);font-size:clamp(32px,4vw,48px);font-weight:500;margin:10px 0}
+.section-heading p{color:var(--muted);font-size:13px}
+
+.navbar{position:sticky;top:0;z-index:100;background:rgba(15,17,21,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+.nav-inner{min-height:82px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:2px}
+.brand span{color:var(--red)}
+.brand small{display:block;font-family:var(--body);font-size:8px;font-weight:500;color:var(--gold);letter-spacing:3px;margin-top:2px}
+.nav-links{display:flex;align-items:center;gap:27px}
+.nav-links a{color:#c5c1ba;font-size:10px;letter-spacing:1px;transition:.3s}
+.nav-links a:hover{color:var(--gold)}
+.menu-toggle{display:none;background:none;border:none;color:white;font-size:25px}
+
+.hero{min-height:690px;display:flex;align-items:center;background:linear-gradient(90deg,rgba(15,17,21,.98),rgba(15,17,21,.78) 55%,rgba(15,17,21,.3)),url("https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=2000&q=85") center/cover}
+.hero-content{max-width:710px;padding:100px 0}
+.hero-kicker{display:flex;align-items:center;gap:12px;margin-bottom:25px}
+.hero-kicker:before{content:"";width:35px;height:1px;background:var(--red)}
+.hero h1{font-family:var(--serif);font-size:clamp(48px,7vw,83px);line-height:1.08;font-weight:500;margin-bottom:25px}
+.hero h1 em{color:#c6a477}
+.hero-description{max-width:520px;color:#c1bdb6;font-size:14px;margin-bottom:30px}
+.button{display:inline-block;padding:14px 25px;background:var(--red);border:1px solid var(--red);color:white;font-size:10px;font-weight:700;letter-spacing:1.5px;transition:.3s}
+.button:hover{background:transparent;color:var(--gold);border-color:var(--gold);transform:translateY(-3px)}
+.hero-signature{color:var(--gold);font-size:9px;letter-spacing:2px;margin-top:25px}
+
+.intro-strip{padding:25px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.strip-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;color:var(--muted);font-size:10px;letter-spacing:2px}
+.strip-inner span:before{content:"✦";color:var(--red);margin-right:10px}
+
+.intro-section{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:65px}
+.intro-image{height:400px;width:100%;object-fit:cover;filter:brightness(.75)}
+.intro-copy h2{font-family:var(--serif);font-size:clamp(35px,4vw,48px);line-height:1.2;margin:15px 0}
+.intro-copy p{color:var(--muted);font-size:13px;margin-bottom:18px}
+
+.collection{background:#13151a;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:35px}
+.filter{padding:10px 18px;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:10px;letter-spacing:1px;transition:.3s}
+.filter:hover,.filter.active{background:var(--red);border-color:var(--red);color:white}
+
+.story-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
+.story-card{background:var(--surface);border:1px solid #292c34;overflow:hidden;transition:.35s}
+.story-card:hover{transform:translateY(-7px);border-color:#85504d}
+.story-card.hide{display:none}
+.story-card img{width:100%;height:250px;object-fit:cover;filter:brightness(.72);transition:.5s}
+.story-card:hover img{filter:brightness(.95);transform:scale(1.04)}
+.card-content{padding:25px}
+.story-tag{color:var(--gold);font-size:9px;font-weight:700;letter-spacing:2px}
+.card-content h3{font-family:var(--serif);font-size:25px;line-height:1.3;margin:12px 0}
+.card-content p{color:var(--muted);font-size:12px;min-height:65px;margin-bottom:22px}
+.read-btn{background:none;border:none;color:var(--gold);border-bottom:1px solid var(--gold);padding-bottom:5px;font-size:10px;letter-spacing:1px;transition:.3s}
+.read-btn:hover{color:white;border-color:white}
+.archive-quote{margin-top:55px;padding:32px;background:#191b22;border-left:3px solid var(--red)}
+.archive-quote p{font-family:var(--display);font-size:26px;color:#d7c7ae;font-style:italic}
+.archive-quote span{display:block;color:var(--gold);font-size:9px;letter-spacing:2px;margin-top:15px}
+
+.story-modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.story-modal.open{display:flex}
+.modal-box{position:relative;background:#181b22;border:1px solid #55463b;width:100%;max-width:850px;max-height:90vh;overflow-y:auto;padding:55px;animation:appear .35s ease}
+.close-modal{position:absolute;right:22px;top:15px;background:none;border:none;color:#d7c7ae;font-size:28px}
+.modal-top{text-align:center;margin-bottom:35px}
+.modal-top h2{font-family:var(--serif);font-size:clamp(34px,5vw,50px);font-weight:500;line-height:1.2;margin:12px 0}
+.modal-meta{color:var(--muted);font-size:9px;letter-spacing:2px}
+.modal-story{max-width:680px;margin:auto;font-family:var(--display);font-size:22px;line-height:1.8;color:#d6d0c7}
+.modal-story p{margin-bottom:19px}
+.modal-story .quote{color:#d7b47f;font-style:italic}
+.modal-story .clue{color:var(--gold);border-bottom:1px dashed var(--gold);cursor:pointer}
+.clue-message{color:var(--gold);font-size:11px;min-height:25px;margin:18px 0}
+.choice-area{max-width:680px;margin:30px auto 0;padding-top:25px;border-top:1px solid var(--line)}
+.choice-heading{color:var(--gold);font-size:10px;letter-spacing:2px;margin-bottom:17px}
+.choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.choice-btn{background:#23262e;border:1px solid #45414a;color:#e8e1d6;text-align:left;padding:16px;font-size:12px;line-height:1.6;transition:.3s}
+.choice-btn:hover{border-color:var(--red);background:#302127}
+.choice-btn span{color:var(--gold);margin-right:8px}
+.story-ending{display:none;margin-top:25px;padding:25px;background:#101218;border-left:3px solid var(--red)}
+.story-ending.show{display:block;animation:appear .4s ease}
+.story-ending h3{font-family:var(--serif);font-size:27px;margin-bottom:12px}
+.story-ending p{color:#c6c0b7;font-family:var(--display);font-size:21px;line-height:1.7;margin-bottom:20px}
+.restart-btn{background:none;color:var(--gold);border:none;border-bottom:1px solid var(--gold);padding-bottom:4px;font-size:10px;letter-spacing:1px}
+.modal-progress{text-align:center;color:var(--muted);font-size:9px;letter-spacing:2px;margin-top:25px}
+
+.character-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.character{background:var(--surface);border:1px solid var(--line);padding:28px;transition:.3s}
+.character:hover{transform:translateY(-5px);border-color:var(--gold)}
+.character-number{color:var(--gold);font-family:var(--display);font-size:42px}
+.character h3{font-family:var(--serif);font-size:24px;margin:8px 0}
+.character p{color:var(--muted);font-size:12px}
+.character small{display:block;color:var(--red);font-size:9px;letter-spacing:2px;margin-top:18px}
+
+.creator{background:#17191f;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.creator-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:center}
+.creator-image{height:450px;width:100%;object-fit:cover;filter:brightness(.75)}
+.creator-copy h2{font-family:var(--serif);font-size:clamp(35px,4vw,45px);line-height:1.2;margin:12px 0 22px}
+.creator-copy p{color:var(--muted);font-size:13px;margin-bottom:15px}
+.creator-signature{font-family:var(--display);color:var(--gold);font-style:italic;font-size:29px;margin-top:25px}
+.creator-caption{color:var(--gold);font-size:9px;letter-spacing:2px;margin-top:8px}
+
+footer{padding:35px 0}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.footer-brand{font-family:var(--serif);font-size:17px;letter-spacing:2px}
+.footer-brand span{color:var(--red)}
+.footer-inner p{color:var(--muted);font-size:10px}
+.back-top{color:var(--gold);font-size:10px;letter-spacing:1px}
+
+@keyframes appear{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:900px){
+.container{width:90%}
+.story-grid{grid-template-columns:repeat(2,1fr)}
+.intro-section,.creator-layout{gap:35px}
+.character-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+.nav-inner{min-height:75px}
+.brand{font-size:15px}
+.menu-toggle{display:block}
+.nav-links{display:none;position:absolute;top:75px;left:0;width:100%;background:#181b22;border-bottom:1px solid var(--line);padding:25px;flex-direction:column;gap:20px}
+.nav-links.open{display:flex}
+.hero{min-height:590px;background-position:60% center}
+.hero h1{font-size:48px}
+.section{padding:70px 0}
+.intro-section,.creator-layout{grid-template-columns:1fr}
+.intro-image{height:280px}
+.story-grid,.character-grid{grid-template-columns:1fr}
+.story-card img{height:230px}
+.modal-box{padding:45px 22px}
+.modal-story{font-size:19px}
+.choice-grid{grid-template-columns:1fr}
+.creator-image{height:290px}
+.footer-inner{flex-direction:column;text-align:center}
+.strip-inner{justify-content:center}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="container nav-inner">
+    <a href="#home" class="brand">THE MIDNIGHT <span>ARCHIVE.</span><small>BY RABIA SEHAR</small></a>
+    <button class="menu-toggle" onclick="toggleMenu()" aria-label="Open navigation">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a href="#home" onclick="closeMenu()">HOME</a>
+      <a href="#collection" onclick="closeMenu()">THE ARCHIVE</a>
+      <a href="#characters" onclick="closeMenu()">CHARACTERS</a>
+      <a href="#creator" onclick="closeMenu()">ABOUT</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="home">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-kicker eyebrow">A DIGITAL ARCHIVE OF DARK FICTION</div>
+      <h1>Where Every Shadow Holds a <em>Secret.</em></h1>
+      <p class="hero-description">Welcome to a world of forgotten letters, mysterious disappearances, silent portraits and stories where nothing is ever quite what it seems.</p>
+      <a href="#collection" class="button">EXPLORE THE ARCHIVE →</a>
+      <div class="hero-signature">AN ORIGINAL CREATIVE WORLD, IMAGINED BY RABIA.</div>
+    </div>
+  </div>
+</header>
+
+<div class="intro-strip">
+  <div class="container strip-inner">
+    <span>Original Fiction</span>
+    <span>Interactive Mysteries</span>
+    <span>Hidden Clues</span>
+    <span>Unexpected Endings</span>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container intro-section">
+    <img class="intro-image" src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1100&q=85" alt="An atmospheric old library">
+    <div class="intro-copy">
+      <div class="eyebrow">WELCOME TO THE ARCHIVE</div>
+      <h2>Not every story wants to be understood.</h2>
+      <p>Some stories leave questions behind. Some hide their most important details in ordinary objects. And some make you question everything you thought you knew.</p>
+      <p>The Midnight Archive is a collection of original fictional mysteries. Each file contains a different world, different characters and a mystery waiting for someone to solve it.</p>
+      <a href="#collection" class="button">OPEN THE FILES →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section collection" id="collection">
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">THE CLASSIFIED COLLECTION</div>
+      <h2>Choose Your Mystery.</h2>
+      <p>Three files. Three different mysteries. Which one will you open?</p>
+    </div>
+
+    <div class="filters">
+      <button class="filter active" onclick="filterStories('all',this)">ALL FILES</button>
+      <button class="filter" onclick="filterStories('mystery',this)">MYSTERY</button>
+      <button class="filter" onclick="filterStories('psychological',this)">PSYCHOLOGICAL</button>
+      <button class="filter" onclick="filterStories('thriller',this)">THRILLER</button>
+    </div>
+
+    <div class="story-grid">
+
+      <article class="story-card" data-category="mystery">
+        <img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=900&q=85" alt="Old letters and books">
+        <div class="card-content">
+          <div class="story-tag">FILE NO. 001 · MYSTERY</div>
+          <h3>The Last Letter</h3>
+          <p>A letter arrives thirteen years after its sender disappeared. The message is addressed to someone who was never supposed to read it.</p>
+          <button class="read-btn" onclick="openStory('letter')">OPEN THIS MYSTERY →</button>
+        </div>
+      </article>
+
+      <article class="story-card" data-category="psychological">
+        <img src="https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=900&q=85" alt="Vintage portrait painting">
+        <div class="card-content">
+          <div class="story-tag">FILE NO. 002 · PSYCHOLOGICAL</div>
+          <h3>The Silent Portrait</h3>
+          <p>An antique painting changes every night. Its mysterious subject appears to know things about its new owner.</p>
+          <button class="read-btn" onclick="openStory('portrait')">OPEN THIS MYSTERY →</button>
+        </div>
+      </article>
+
+      <article class="story-card" data-category="thriller">
+        <img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=900&q=85" alt="Mysterious hotel hallway">
+        <div class="card-content">
+          <div class="story-tag">FILE NO. 003 · THRILLER</div>
+          <h3>Room Number 09</h3>
+          <p>A hotel guest receives a key to a room that does not exist. But someone has already checked in under her name.</p>
+          <button class="read-btn" onclick="openStory('room')">OPEN THIS MYSTERY →</button>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="archive-quote">
+      <p>"A mystery is not always about finding the truth. Sometimes it is about discovering why someone wanted it hidden."</p>
+      <span>A NOTE FROM THE ARCHIVE · RABIA SEHAR</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="characters">
+  <div class="container">
+    <div class="section-heading">
+      <div class="eyebrow">BEHIND THE MYSTERIES</div>
+      <h2>Character Files</h2>
+      <p>Every mystery has someone who knows more than they admit.</p>
+    </div>
+
+    <div class="character-grid">
+      <div class="character">
+        <div class="character-number">01</div>
+        <div class="story-tag">FILE 001</div>
+        <h3>Clara Bennett</h3>
+        <p>A young woman who receives a letter from someone who vanished thirteen years ago.</p>
+        <small>STATUS: SEARCHING FOR ANSWERS</small>
+      </div>
+
+      <div class="character">
+        <div class="character-number">02</div>
+        <div class="story-tag">FILE 002</div>
+        <h3>Isabelle Reed</h3>
+        <p>An art collector who discovers that her newest painting is hiding a very personal secret.</p>
+        <small>STATUS: UNDER OBSERVATION</small>
+      </div>
+
+      <div class="character">
+        <div class="character-number">03</div>
+        <div class="story-tag">FILE 003</div>
+        <h3>Amelia Hart</h3>
+        <p>A traveller whose hotel reservation leads her to a room missing from every official record.</p>
+        <small>STATUS: LOCATION UNKNOWN</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section creator" id="creator">
+  <div class="container creator-layout">
+    <img class="creator-image" src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1000&q=85" alt="A creative writing desk">
+    <div class="creator-copy">
+      <div class="eyebrow">THE MIND BEHIND THE ARCHIVE</div>
+      <h2>Every mystery begins with an imagination.</h2>
+      <p>Hello, I'm <strong>Rabia Sehar</strong> — a university student, creative thinker and the person behind The Midnight Archive.</p>
+      <p>I've always been interested in psychological mysteries, unusual characters, unexpected plot twists and fictional worlds that leave something to think about.</p>
+      <p>I enjoy exploring creative ideas and turning little thoughts into something meaningful. Alongside storytelling, I'm also studying computer science and learning how to create digital projects.</p>
+      <p>This website brings those interests together. It is my personal creative space to experiment, imagine, write and build something of my own.</p>
+      <div class="creator-signature">With imagination, Rabia.</div>
+      <div class="creator-caption">FOUNDER & CREATOR · THE MIDNIGHT ARCHIVE</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-brand">THE MIDNIGHT <span>ARCHIVE.</span></div>
+    <p>A personal creative project by Rabia Sehar.</p>
+    <p>© 2026 The Midnight Archive</p>
+    <a href="#home" class="back-top">BACK TO TOP ↑</a>
+  </div>
+</footer>
+
+<div class="story-modal" id="storyModal" onclick="outsideClose(event)">
+  <div class="modal-box">
+    <button class="close-modal" onclick="closeStory()" aria-label="Close story">×</button>
+
+    <div class="modal-top">
+      <div class="eyebrow" id="storyCategory">CLASSIFIED FILE</div>
+      <h2 id="storyTitle">Story Title</h2>
+      <div class="modal-meta" id="storyMeta"></div>
+    </div>
+
+    <div class="modal-story" id="storyContent"></div>
+    <div class="clue-message" id="clueMessage">Click underlined words to reveal hidden clues.</div>
+
+    <div class="choice-area">
+      <div class="choice-heading" id="choiceHeading">WHAT WILL YOU DO?</div>
+      <div class="choice-grid" id="storyChoices"></div>
+
+      <div class="story-ending" id="storyEnding">
+        <h3 id="endingTitle"></h3>
+        <p id="endingText"></p>
+        <button class="restart-btn" onclick="restartCurrentStory()">↻ READ THIS STORY AGAIN</button>
+      </div>
+    </div>
+
+    <div class="modal-progress">AN ORIGINAL MYSTERY FROM THE MIDNIGHT ARCHIVE</div>
+  </div>
+</div>
+
+<script>
+function toggleMenu(){
+  document.getElementById("navLinks").classList.toggle("open");
+}
+
+function closeMenu(){
+  document.getElementById("navLinks").classList.remove("open");
+}
+
+function filterStories(category,button){
+  document.querySelectorAll(".filter").forEach(btn=>btn.classList.remove("active"));
+  button.classList.add("active");
+
+  document.querySelectorAll(".story-card").forEach(card=>{
+    const matches=category==="all"||card.dataset.category===category;
+    card.classList.toggle("hide",!matches);
+  });
+}
+
+const stories={
+
+letter:{
+title:"The Last Letter",
+category:"FILE NO. 001 · MYSTERY",
+meta:"A STORY OF LOST YEARS, FAMILY SECRETS & SECOND CHANCES",
+
+scene:`
+<p>Rain tapped against Clara Bennett's apartment window when the envelope appeared beneath her door. It was thick, cream-coloured and sealed with dark red wax. Her name was written across the front in a handwriting she had not seen in thirteen years.</p>
+
+<p>Her brother Daniel had vanished on a cold November evening. No goodbye. No explanation. Just an empty bedroom and a family that slowly learned not to speak his name.</p>
+
+<p>Inside the envelope, Clara found a brass key, a faded photograph of their childhood home and a letter.</p>
+
+<p class="quote">"Clara, if you're reading this, the house has finally started telling the truth. Go to the place where we used to hide when the world became too loud. And please, this time, don't leave before you find me."</p>
+
+<p>Clara read the words twice. Their old house had been sold years ago, but the little blue garden shed at the back had belonged to Daniel alone. On the photograph, someone had circled its tiny window in red ink.</p>
+
+<p>She turned the photograph over. A second message had been written there: <span class="clue" onclick="revealClue('letter','message')">"The clock remembers."</span></p>
+
+<p>At the bottom of the envelope was a train ticket dated tomorrow. The destination was the small town where their grandmother had lived. Clara had two leads, one key, and a decision to make.</p>
+`,
+
+clue:{
+message:"CLUE: Their grandmother's old clock stopped at 11:11 on the night Daniel disappeared."
+},
+
+choices:[
+{text:"Go to the childhood house and unlock the blue garden shed.",next:"shed"},
+{text:"Take the train to their grandmother's town.",next:"station"}
+],
+
+endings:{
+
+shed:{
+title:"ENDING I — THE ROOM BEHIND THE SHED",
+text:"The brass key opened a narrow cabinet hidden beneath the shed's workbench. Inside were thirteen envelopes, one for every birthday Clara had celebrated without Daniel. Each contained a small memory: a pressed flower, a cinema ticket, a silly drawing. The final envelope held a voice recorder. Daniel's voice filled the dusty shed. He explained that he had left after discovering that their late father had secretly sold the family home and planned to send Clara away to live with relatives. Daniel had gone to their grandmother to find proof and had been afraid that writing directly would put Clara in the middle of the argument. The final recording gave her an address. Clara followed it to a little bookshop nearby. Daniel was there, older and quieter, but unmistakably her brother. 'I thought you would forget me,' he said. Clara placed the photograph between them. 'I kept every version of you,' she replied. Outside, the rain finally stopped. The mystery was over; the years apart would take longer to mend, but this time neither of them walked away."
+},
+
+station:{
+title:"ENDING II — THE ELEVEN-ELEVEN PLATFORM",
+text:"The train carried Clara to the town where her grandmother had once lived. At the station, the old clock had stopped at 11:11. A station attendant recognised the photograph and led her to a small waiting room that had been closed for years. Behind a loose wooden panel, Clara found a bundle of letters from Daniel. They revealed that he had discovered a box of family documents proving their father had been hiding the truth about their mother's final years. Daniel had left to protect Clara from a bitter dispute, but he had never stopped trying to contact her. The last letter contained a current address and one sentence: 'If you are ready to hear everything, meet me where the sea touches the railway.' Clara found him at the coastal station just before sunset. They spoke until the platform lights came on. Daniel told her the truth, and Clara told him what his silence had cost her. Neither apology fixed thirteen years, but both were finally honest. When the next train arrived, they boarded it together."
+}
+
+}
+},
+
+portrait:{
+title:"The Silent Portrait",
+category:"FILE NO. 002 · PSYCHOLOGICAL MYSTERY",
+meta:"A STORY OF ART, MEMORY & THE FACE IN THE FRAME",
+
+scene:`
+<p>Isabelle Reed bought the portrait at an auction on a grey Thursday. It showed a young woman in a dark green dress, standing beside a window and holding a white flower. The painting was beautiful, but the expression on the woman's face made Isabelle feel as if she had interrupted a private thought.</p>
+
+<p>The auctioneer knew almost nothing about it. No artist's name. No date. Only a small label on the back: <em>For Eliza, always.</em></p>
+
+<p>Isabelle hung it in her study. The next morning, she was certain the painted woman had been looking towards the door. By evening, the woman's gaze seemed fixed on Isabelle.</p>
+
+<p>She examined the frame and found a folded <span class="clue" onclick="revealClue('portrait','note')">note</span> tucked beneath the backing. It read: <span class="quote">"A picture keeps what a family tries to forget."</span></p>
+
+<p>That night, Isabelle searched the town archive. An old newspaper photograph showed the same portrait in a manor house that had belonged to the Vale family. The article mentioned a painter named Eliza Vale, who had disappeared before her final exhibition.</p>
+
+<p>At the bottom of the note was a second clue: <span class="clue" onclick="revealClue('portrait','flower')">"Look for the flower that never fades."</span> Isabelle remembered the white flower in the painting. It was not a rose or a lily. It was a paper flower, folded from a tiny page.</p>
+
+<p>She could search the portrait itself for the hidden page, or visit the abandoned Vale conservatory before it was demolished the following morning.</p>
+`,
+
+clue:{
+note:"CLUE: The note is written in blue ink, the same colour used in the tiny signature on the portrait's lower corner.",
+flower:"CLUE: The flower is folded from a page of an old diary. A few visible words read: 'I painted the truth because I could not say it.'"
+},
+
+choices:[
+{text:"Carefully inspect the painted flower and the back of the canvas.",next:"canvas"},
+{text:"Visit the abandoned Vale conservatory.",next:"conservatory"}
+],
+
+endings:{
+
+canvas:{
+title:"ENDING I — THE PAGE INSIDE THE PAINTING",
+text:"Isabelle removed the frame and discovered a thin diary page sealed between the canvas and its backing. It belonged to Eliza Vale. The diary explained that the woman in the portrait was Eliza's sister, Rose, who had been blamed for stealing a family heirloom. Eliza knew Rose was innocent, but the family refused to listen. So she hid the evidence inside her painting, where no one thought to look. The page included the name of the real thief: the family solicitor, who had forged the sale papers and kept the heirloom. Isabelle traced the old records and found the missing object in a private collection. The portrait's mystery was finally solved. At the next local exhibition, she displayed it with Eliza's diary page beside it. For the first time in a century, the painted woman was no longer remembered as a suspect, but as Rose — a sister who had been telling the truth all along."
+},
+
+conservatory:{
+title:"ENDING II — THE FLOWER ROOM",
+text:"The conservatory smelled of wet soil and old glass. Isabelle found a small locked drawer beneath a stone planter. Inside lay a bundle of letters from Eliza to her sister Rose, along with a pressed white flower. The letters revealed that Eliza had hidden her sister after the family accused Rose of a crime she had not committed. The portrait had been painted as a coded map: the window, the flower and the angle of the woman's hand pointed to the drawer. Isabelle also found a final letter addressed to whoever discovered the truth. It asked that Rose's name be cleared and the portrait returned to the town gallery. Months later, the painting hung in a bright room where visitors could read the sisters' story. Isabelle sometimes thought the painted woman's expression looked different there — not because the portrait had changed, but because its secret was no longer trapped inside it."
+}
+
+}
+},
+
+room:{
+title:"Room Number 09",
+category:"FILE NO. 003 · THRILLER",
+meta:"A STORY OF A HOTEL, A MISSING ROOM & AN OLD PROMISE",
+
+scene:`
+<p>Amelia Hart arrived at the Grand Meridian Hotel at 11:09 PM. The lobby was almost empty, and a storm had turned the windows into sheets of moving silver.</p>
+
+<p>The receptionist checked her reservation and frowned. "Room 309, yes. But there is something strange."</p>
+
+<p>He placed a small silver key on the counter. Its tag was marked with a single number: <strong>09</strong>.</p>
+
+<p>"This key was left for you," he said. "By whom?" Amelia asked. The receptionist looked towards the dark staircase. "The night manager. He said you would know."</p>
+
+<p>Amelia had never visited the hotel before. At least, she was sure she had not. Yet the smell of cedarwood in the lobby made her remember a lullaby her mother used to sing.</p>
+
+<p>Inside the key envelope was a faded <span class="clue" onclick="revealClue('room','receipt')">receipt</span>. It showed a check-in thirteen years earlier, under the name Amelia Hart. On the back, someone had written: <span class="quote">"Ask what happened before the ninth door was sealed."</span></p>
+
+<p>The receptionist refused to say more. At the end of the corridor, an old lift stood open. Beside it was a staircase leading down to the hotel's closed basement. Amelia could hear a clock ticking somewhere below.</p>
+`,
+
+clue:{
+receipt:"CLUE: The receipt is signed by the same night manager who is standing behind the reception desk. The date is the night Amelia was adopted."
+},
+
+choices:[
+{text:"Question the night manager and demand to see the old guest register.",next:"register"},
+{text:"Take the silver key downstairs and search for the sealed ninth door.",next:"door"}
+],
+
+endings:{
+
+register:{
+title:"ENDING I — THE NAME IN THE REGISTER",
+text:"The night manager finally opened the old guest register. On the page dated thirteen years earlier, Amelia found her own name — but beside it was another: Nora Hart, her mother. The manager explained that a fire had forced the hotel to close its ninth room. Nora had been a guest that night and had left a sealed envelope with instructions: if her daughter ever returned, she should be given the truth. Amelia opened it with trembling hands. Her mother had worked at the hotel and discovered that its owner was stealing guests' belongings and altering the records. She had gathered proof, hidden it in Room 09 and disappeared before she could expose him. The manager had kept the promise to protect the evidence until Amelia was old enough to decide what to do with it. The envelope contained the documents and a final note from Nora: 'You deserve a life built on truth, not fear.' Amelia took the papers to the authorities. The hotel was investigated, and her mother's name was cleared. She left at sunrise carrying the truth she had come for."
+},
+
+door:{
+title:"ENDING II — BEHIND THE NINTH DOOR",
+text:"The silver key opened a narrow door behind the basement shelves. Room 09 was small, untouched and strangely warm. A suitcase stood beside the bed. On the table lay a photograph of a young woman holding a baby — Amelia and her mother. Beneath it was a tape recorder and a letter. The recording revealed that Nora had hidden evidence of the hotel's crimes in the room before vanishing. She had asked the night manager to keep the room sealed until Amelia came looking. The letter explained everything: Nora had not abandoned her daughter; she had arranged for Amelia to be raised somewhere safe while she gathered proof against the people threatening her. In the suitcase, Amelia found the original records and a second photograph taken only a few months ago. On its back was an address. Amelia followed it to a seaside cottage, where she found Nora alive, older and waiting. Their reunion was quiet at first, full of questions neither knew how to ask. Then Nora opened her arms. The missing room had not held a ghost. It had held a promise — and at last, Amelia had found the person who made it."
+}
+
+}
+}
+
+};
+
+let currentStory=null;
+
+function openStory(storyId){
+  currentStory=storyId;
+  const story=stories[storyId];
+
+  document.getElementById("storyTitle").textContent=story.title;
+  document.getElementById("storyCategory").textContent=story.category;
+  document.getElementById("storyMeta").textContent=story.meta;
+  document.getElementById("storyContent").innerHTML=story.scene;
+
+  document.getElementById("clueMessage").textContent="Click underlined words to reveal hidden clues.";
+  document.getElementById("choiceHeading").textContent="WHAT WILL YOU DO NEXT?";
+  document.getElementById("storyEnding").classList.remove("show");
+  document.getElementById("storyChoices").style.display="grid";
+
+  showChoices(story.choices);
+
+  document.getElementById("storyModal").classList.add("open");
+  document.body.classList.add("modal-open");
+}
+
+function showChoices(choiceList){
+  const container=document.getElementById("storyChoices");
+  container.innerHTML="";
+
+  choiceList.forEach((choice,index)=>{
+    const button=document.createElement("button");
+    button.className="choice-btn";
+
+    const number=document.createElement("span");
+    number.textContent=String(index+1).padStart(2,"0")+".";
+
+    button.appendChild(number);
+    button.appendChild(document.createTextNode(" "+choice.text));
+    button.addEventListener("click",()=>finishStory(choice.next));
+
+    container.appendChild(button);
+  });
+}
+
+function revealClue(storyId,clueId){
+  if(storyId!==currentStory)return;
+  document.getElementById("clueMessage").textContent=stories[storyId].clue[clueId];
+}
+
+function finishStory(endingId){
+  const ending=stories[currentStory].endings[endingId];
+  if(!ending)return;
+
+  document.getElementById("endingTitle").textContent=ending.title;
+  document.getElementById("endingText").textContent=ending.text;
+  document.getElementById("storyEnding").classList.add("show");
+  document.getElementById("storyChoices").style.display="none";
+  document.getElementById("choiceHeading").textContent="MYSTERY SOLVED... OR IS IT?";
+  document.getElementById("clueMessage").textContent="You discovered one possible ending. Every choice changes your experience.";
+}
+
+function restartCurrentStory(){
+  if(currentStory)openStory(currentStory);
+}
+
+function closeStory(){
+  document.getElementById("storyModal").classList.remove("open");
+  document.body.classList.remove("modal-open");
+}
+
+function outsideClose(event){
+  if(event.target.id==="storyModal")closeStory();
+}
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape")closeStory();
+});
+</script>
+
+</body>
+</html>
